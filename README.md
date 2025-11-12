@@ -1,6 +1,6 @@
 # 🤖 n8n - Template "Traer Emails" (Gmail)
 
-Este repositorio contiene un template sencillo de n8n para traer correos de Gmail y generar embeddings con OpenAI, guardándolos en una memoria vectorial en memoria (no persistente). Es ideal como base para pruebas de RAG o para explorar tus emails recientes.
+Este repositorio contiene un template sencillo de n8n para traer correos de Gmail filtrando por una palabra clave con el parámetro `q` de Gmail. Incluye un nodo `Set` para exponer campos útiles como `Subject`, `From` y `labels`.
 
 ## 📁 Estructura
 
@@ -11,7 +11,6 @@ Este repositorio contiene un template sencillo de n8n para traer correos de Gmai
 
 - Docker y el comando `docker compose`
 - Una cuenta de Gmail para autorizar el acceso (OAuth2)
-- Una API Key de OpenAI
 
 ## 🚀 Puesta en marcha
 
@@ -29,23 +28,22 @@ docker compose up -d
 2) Selecciona `templates/traer_emails.json`.
 3) Reasigna las credenciales cuando te lo pida:
    - Gmail OAuth2 (para el nodo `Get many messages`)
-   - OpenAI API (para el nodo `Embeddings OpenAI`)
 
 ## 🧠 ¿Qué hace el workflow?
 
-- Lee hasta 10 emails no leídos desde Gmail (incluye spam y papelera por defecto).
-- Carga los encabezados como documento.
-- Genera embeddings con OpenAI.
-- Inserta los vectores en un Vector Store en memoria (no se persiste entre ejecuciones).
+- Busca mensajes en Gmail según `q` (por defecto: "jetsmart"), incluyendo leídos y no leídos (`readStatus: both`).
+- No incluye spam ni papelera por defecto (`includeSpamTrash: false`).
+- Limita los resultados a `limit = 10`.
+- Usa un nodo `Set` para exponer campos: `Subject`, `From` y `labels`.
 
 ## 🔧 Personalización rápida
 
 - En el nodo `Get many messages` puedes cambiar:
-  - `limit`: cantidad de correos (p. ej. 50)
-  - `filters.readStatus`: `unread` o `all`
+  - `limit`: cantidad de correos (p. ej., 50)
+  - `filters.q`: palabra o frase a buscar (asunto/cuerpo)
+  - `filters.readStatus`: `unread`, `read`, `both` o `all`
   - `filters.includeSpamTrash`: activar/desactivar
-- Para persistencia, reemplaza el `Vector Store In Memory` por un almacén persistente compatible.
-- Para indexar cuerpo de los emails, adapta el `Default Data Loader` a `{{$json.body}}` u otro campo.
+- En el nodo `Set` puedes ajustar qué campos exponer (por ejemplo, agregar `To`, `Date`, etc.).
 
 ## 🛠️ Comandos útiles
 
