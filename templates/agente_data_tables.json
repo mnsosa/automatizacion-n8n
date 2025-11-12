@@ -1,0 +1,155 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "640335cf-ed79-4dd6-bce3-dd9ef0b00cc4",
+      "name": "When chat message received",
+      "webhookId": "9fd1bcf9-6028-4ab4-b4f2-0314a9e79911"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Sos un asistente que siempre le dice al usuario \"Esperá un momentito, ...\" y luego una excusa como que hay un transistor que no te anda o cosas así. Luego siempre usá la tool para registrar el chat en la data table y guardar de manera estructurada."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        208,
+        0
+      ],
+      "id": "a8114eaa-0393-4376-80a3-adff593a7689",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        144,
+        240
+      ],
+      "id": "05b1b947-8883-4362-abe5-c1f86aef45b7",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "bsFuN0nNQD2lsNHt",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Insertar conclusiones de cada chat con esta herramienta",
+        "dataTableId": {
+          "__rl": true,
+          "value": "8Zr9k18qXMnYQKb0",
+          "mode": "list",
+          "cachedResultName": "demo",
+          "cachedResultUrl": "/projects/gnqQBQv4EN1Wf8nw/datatables/8Zr9k18qXMnYQKb0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "sessionId": "={{ $json.sessionId }}",
+            "conclusiones": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('conclusiones', ``, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "sessionId",
+              "displayName": "sessionId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "conclusiones",
+              "displayName": "conclusiones",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "optimizeBulk": false
+        }
+      },
+      "type": "n8n-nodes-base.dataTableTool",
+      "typeVersion": 1,
+      "position": [
+        416,
+        256
+      ],
+      "id": "697a1dca-4616-4a99-abb6-a9ae4098346f",
+      "name": "insertar en data table",
+      "notes": "Insertar conclusiones de cada chat con esta herramienta"
+    }
+  ],
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "insertar en data table": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5461bb4428d70e8fc07a4789dd20e8bd69a1c4a84a3b36bbc17004203a03b1e0"
+  }
+}

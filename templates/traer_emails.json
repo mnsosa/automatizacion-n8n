@@ -4,13 +4,13 @@
       "parameters": {
         "inputSource": "passthrough"
       },
-      "id": "40283b38-be5d-487c-99d8-4f21d8fb685a",
+      "id": "997ec97d-af32-4b4c-9b67-ffdcba339423",
       "typeVersion": 1.1,
       "name": "Start",
       "type": "n8n-nodes-base.executeWorkflowTrigger",
       "position": [
-        976,
-        192
+        304,
+        48
       ]
     },
     {
@@ -48,10 +48,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1424,
-        192
+        752,
+        48
       ],
-      "id": "04d208a3-a678-49f5-8c48-6eb53372df32",
+      "id": "a664dc2b-bb22-4eda-a9ab-b3af3a97233b",
       "name": "Edit Fields"
     },
     {
@@ -67,16 +67,49 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        1200,
-        192
+        528,
+        48
       ],
-      "id": "05be6d48-8097-4ae2-9d3d-9e365f7fb3b8",
+      "id": "2e47ade0-8f24-40cb-97cc-a1b3f8cee8ad",
       "name": "Get many messages",
       "webhookId": "280f7704-1839-4f46-83aa-6d5ee1e17dce",
       "credentials": {
         "gmailOAuth2": {
-          "id": "8pfM8006xbY6DG4A",
+          "id": "9ZwZGnm0gxdfTxhY",
           "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-nano",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1-NANO"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "=Este email es spam? Justificá {{ $json.Subject }}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2,
+      "position": [
+        976,
+        48
+      ],
+      "id": "5b40f760-1adf-4f4d-b292-a7abba75f932",
+      "name": "Es spam?",
+      "credentials": {
+        "openAiApi": {
+          "id": "bsFuN0nNQD2lsNHt",
+          "name": "OpenAi account"
         }
       }
     }
@@ -87,6 +120,17 @@
         [
           {
             "node": "Get many messages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Es spam?",
             "type": "main",
             "index": 0
           }
@@ -108,6 +152,6 @@
   "pinData": {},
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "c295224bcb48d242741e4e893513c8bf2f2c983c00db0a6f77e2490ec0ee92ce"
+    "instanceId": "5461bb4428d70e8fc07a4789dd20e8bd69a1c4a84a3b36bbc17004203a03b1e0"
   }
 }
