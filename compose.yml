@@ -1,0 +1,21 @@
+services:
+  n8n:
+    image: docker.n8n.io/n8nio/n8n
+    container_name: n8n
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    environment:
+      # Zona horaria - Cambia esto según tu ubicación
+      - GENERIC_TIMEZONE=America/Argentina/Buenos_Aires
+      - TZ=America/Argentina/Buenos_Aires
+      # Configuraciones de seguridad y funcionalidad
+      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
+      - N8N_RUNNERS_ENABLED=true
+    volumes:
+      # Aquí se guardan todas tus automatizaciones y datos
+      - n8n_data:/home/node/.n8n
+
+volumes:
+  # Volumen para persistir los datos de n8n
+  n8n_data:
